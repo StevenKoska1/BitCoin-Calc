@@ -19,17 +19,24 @@ app.post('/', function(req, res){
         console.log("Status Message: ", response.statusMessage);
         console.log("Server Status Code", response.statusCode);
         console.log(response.body);
+    
+        let amount;
 
         let data = JSON.parse(response.body);
         let price;
+        let bitcoin = parseFloat(req.body.bitcoin);
+        console.log(bitcoin);
 
         if(currency === "EUR"){
-            price = data.bpi.EUR.rate;
-            console.log("Price in EUR", price);
+            price = data.bpi.EUR.rate_float;
+            console.log("Price in EUR", price)
+            amount = price * bitcoin;
             
         } else{
             price = data.bpi.USD.rate_float;
             console.log("Pirce in USD", price);
+            amount = price * bitcoin;
+        
             
         }
 
@@ -37,7 +44,8 @@ app.post('/', function(req, res){
 
         res.write(`${disclaimer}`);
         res.write('<br>');
-        res.write(`Current price in ${currency} is ${price}`);
+        res.write(`Current price in ${currency} is ${amount}`);
+        
         res.send();
         
         
